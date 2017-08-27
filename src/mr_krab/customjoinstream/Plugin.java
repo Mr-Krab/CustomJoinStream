@@ -13,17 +13,29 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import net.milkbowl.vault.chat.Chat;
 
 public class Plugin extends JavaPlugin implements Listener {
 	public static Plugin instance;
 	FileConfiguration config = getConfig();
 	PluginManager pm = getServer().getPluginManager();
 	private static final Logger mclog = Logger.getLogger("minecraft");
+	public static Chat c = null;
+	private boolean setupChat() {
+	    RegisteredServiceProvider<Chat> cp = getServer().getServicesManager().getRegistration(Chat.class);
+	    if (cp != null) {
+	      c = (Chat)cp.getProvider();
+	    }
+	    return c != null;
+	}
 	// Включение плагина
 	public void onEnable() {
 		saveDefaultConfig();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
+	    setupChat();
 		mclog.info("Плагин [CustomJoinStream] активирован");
 		mclog.info("Автор Mr_Krab");
 		mclog.info("Спасибо за использование и тестирование моих плагинов");
@@ -38,9 +50,11 @@ public class Plugin extends JavaPlugin implements Listener {
         je.setJoinMessage(null); {
         // Проверка на наличие пермишена и вывод своего сообщения
         Player p = je.getPlayer();
+        String group = Plugin.c.getPrimaryGroup(p);
+        String prefix = Plugin.c.getGroupPrefix(p.getWorld(), group); 
 		if(!p.hasPermission("customjoinstream.stream")) {
 			} else {
-					je.setJoinMessage(getConfig().getString("JoinMessage").replace("%p", je.getPlayer().getName()).replace("&", "§"));
+					je.setJoinMessage(getConfig().getString("Messages.JoinMessage").replace("%prefix", prefix).replace("%nickname", je.getPlayer().getName()).replace("&", "§"));
 				return true;
 			}
 		return false;
@@ -52,9 +66,11 @@ public class Plugin extends JavaPlugin implements Listener {
         je.setQuitMessage(null); {
         // Проверка на наличие пермишена и вывод своего сообщения
         Player p = je.getPlayer();
+        String group = Plugin.c.getPrimaryGroup(p);
+        String prefix = Plugin.c.getGroupPrefix(p.getWorld(), group); 
 		if(!p.hasPermission("customjoinstream.stream")) {
 			} else {
-					je.setQuitMessage(getConfig().getString("QuitMessage").replace("%p", je.getPlayer().getName()).replace("&", "§"));
+					je.setQuitMessage(getConfig().getString("Messages.QuitMessage").replace("%prefix", prefix).replace("%nickname", je.getPlayer().getName()).replace("&", "§"));
 				return true;
 			}
 		return false;
