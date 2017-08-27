@@ -18,9 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Plugin extends JavaPlugin implements Listener {
 	public static Plugin instance;
 	FileConfiguration config = getConfig();
-    public void register() {
-        Bukkit.getPluginManager().registerEvents(this, this);
-    }
 	PluginManager pm = getServer().getPluginManager();
 	private static final Logger mclog = Logger.getLogger("minecraft");
 	// Включение плагина
