@@ -62,15 +62,15 @@ public class Plugin extends JavaPlugin implements Listener {
 	}
 	// Скрытие стандартного сообщения о выходе игрока
 	@EventHandler(priority = EventPriority.MONITOR)
-    public boolean QuitUpdate(PlayerQuitEvent je) {
-        je.setQuitMessage(null); {
+    public boolean QuitUpdate(PlayerQuitEvent qe) {
+        qe.setQuitMessage(null); {
         // Проверка на наличие пермишена и вывод своего сообщения
-        Player p = je.getPlayer();
+        Player p = qe.getPlayer();
         String group = Plugin.c.getPrimaryGroup(p);
         String prefix = Plugin.c.getGroupPrefix(p.getWorld(), group); 
 		if(!p.hasPermission("customjoinstream.stream")) {
 			} else {
-					je.setQuitMessage(getConfig().getString("Messages.QuitMessage").replace("%prefix", prefix).replace("%nickname", je.getPlayer().getName()).replace("&", "§"));
+					qe.setQuitMessage(getConfig().getString("Messages.QuitMessage").replace("%prefix", prefix).replace("%nickname", qe.getPlayer().getName()).replace("&", "§"));
 				return true;
 			}
 		return false;
