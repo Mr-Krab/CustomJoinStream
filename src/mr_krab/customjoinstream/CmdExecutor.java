@@ -18,7 +18,7 @@ public class CmdExecutor implements CommandExecutor {
 			sender.sendMessage("Недостаточно прав");
 			return true;
 			}else{
-				if (cmd.getName().equals("cjs") && args.length >=1) {
+				if (cmd.getName().equals("customjoinstream") && args.length >=1) {
 				if (args[0].equalsIgnoreCase("reload")) {
 					plugin.reloadConfig();
 				}
