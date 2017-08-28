@@ -2,4 +2,4 @@ name: CostumJoinStream
 main: mr_krab.customjoinstream.Plugin
 version: 0.8
 author: Mr_Krab
-description: '&3Простой самописный плагин'
+description: 'Аналог HideStream с дополнительными фишками'

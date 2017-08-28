@@ -43,7 +43,7 @@ public class Plugin extends JavaPlugin implements Listener {
 		 */
 		try {
             CmdExecutor cmd = new CmdExecutor(this);
-            CommandRegister reg = new CommandRegister(new String[]{"customjoinstream"}, "Используйте", "customjoinstream или cjs", cmd, new Object(), this);
+            CommandRegister reg = new CommandRegister(new String[]{"customjoinstream", "cjs"}, "Используйте", "customjoinstream или cjs", cmd, new Object(), this);
             Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             field.setAccessible(true);
             CommandMap map = (CommandMap)field.get(Bukkit.getServer());

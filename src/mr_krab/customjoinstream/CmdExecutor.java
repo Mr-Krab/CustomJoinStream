@@ -14,17 +14,29 @@ public class CmdExecutor implements CommandExecutor {
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("customjoinstream.reload")) {
-			sender.sendMessage("Недостаточно прав");
-			return true;
-			}else{
-				if (cmd.getName().equals("customjoinstream") && args.length >=1) {
+				if (cmd.getName().equalsIgnoreCase("customjoinstream") && args.length >=1) {
 				if (args[0].equalsIgnoreCase("reload")) {
-					plugin.reloadConfig();
-				}
-				sender.sendMessage("Конфиг перезагружен");
-                        }
-						return true;                       
-    }
+					if(sender.hasPermission("customjoinstream.reload")){
+						plugin.reloadConfig();
+						sender.sendMessage("Конфиг перезагружен");
+						return true;
+					}
+					/* В ТУДУ лист
+					 * Добавить команды
+					 * Изменить сообщения на выводимые из конфига
+					 */
+                  }  
+			sender.sendMessage("Недостаточно прав customjoinstream.reload");
+		}
+				if(sender.hasPermission("customjoinstream.admin")){
+				sender.sendMessage("-----=====[Справка По плагину CustomJoinStream]=====-----");
+				sender.sendMessage("customjoinstream - Основная команда. Далее cjs");
+				sender.sendMessage("cjs reload - Перезагрузка плагина");
+				sender.sendMessage("-----=====+++++++++***+++***+++***+++++++++++=====-----");
+				} else {
+					sender.sendMessage("Недостаточно прав customjoinstream.admin");
+			}
+	return false;
 	}
+	
 }
