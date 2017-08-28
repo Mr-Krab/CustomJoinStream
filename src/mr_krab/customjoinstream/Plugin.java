@@ -36,10 +36,16 @@ public class Plugin extends JavaPlugin implements Listener {
 		saveDefaultConfig();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 	    setupChat();
+		CmdExecutor cmde = new CmdExecutor(this);
+		String[] comands = { "cjs" };
+		for (String cmd : comands) {
+			getCommand(cmd).setExecutor(cmde);
+}
 		mclog.info("Плагин [CustomJoinStream] активирован");
 		mclog.info("Автор Mr_Krab");
 		mclog.info("Спасибо за использование и тестирование моих плагинов");
 	}
+	
 	// Выключение плагина
 	public void onDisable() {
 		mclog.info("Плагин [CustomJoinStream] отключается");
