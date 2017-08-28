@@ -1,11 +1,14 @@
 package mr_krab.customjoinstream;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,9 +36,19 @@ public class Plugin extends JavaPlugin implements Listener {
 	    }
 	    return c != null;
 	}
+	public void saveCustomYml(FileConfiguration ymlConfig, File ymlFile) {
+		try {
+		ymlConfig.save(ymlFile);
+		} catch (IOException e) {
+		e.printStackTrace();
+		}
+		}
 	// Включение плагина
 	public void onEnable() {
 		saveDefaultConfig();
+		File customYml = new File(this.getDataFolder()+"/helpmessages.yml");
+		FileConfiguration helpmessages = YamlConfiguration.loadConfiguration(customYml);
+		saveCustomYml(helpmessages, customYml);
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		/* Активируем рефлексию Java для регистрации команд
 		 * Регистрация производится через класс CommandRegister(не изменять его)
