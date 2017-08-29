@@ -22,10 +22,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.milkbowl.vault.chat.Chat;
 
 public class Plugin extends JavaPlugin implements Listener {
-	public static Plugin instance;
+	public static Plugin plugin;
 	FileConfiguration config = getConfig();
 	PluginManager pm = getServer().getPluginManager();
-	public Translator translator;
+	private Translator translator;
 	private static final Logger mclog = Logger.getLogger("minecraft");
 	public static Chat c = null;
 	private boolean setupChat() {
@@ -40,10 +40,14 @@ public class Plugin extends JavaPlugin implements Listener {
         lang.mkdirs();
         return lang;
 	}
+	public String translate(String key) {
+        return translator.translate(key);
+}
+	public String translate(String key, Object... values) {
+        return translator.translate(key, values);
+}
 	// Включение плагина
 	public void onEnable() {
-		String lang = this.getConfig().getString("lang");
-		this.translator = new Translator(this,lang);
 		saveDefaultConfig();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		/* Активируем рефлексию Java для регистрации команд
@@ -61,6 +65,8 @@ public class Plugin extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
 	    setupChat();
+		String lang = this.getConfig().getString("lang");
+		this.translator = new Translator(this,lang);
 		mclog.info("Плагин [CustomJoinStream] активирован");
 		mclog.info("Автор Mr_Krab");
 		mclog.info("Спасибо за использование и тестирование моих плагинов");
