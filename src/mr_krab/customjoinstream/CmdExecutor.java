@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 public class CmdExecutor implements CommandExecutor {
 
 	Plugin plugin;
-
+	Translator t;
 	public CmdExecutor(Plugin p) {
 		plugin = p;
 	}
