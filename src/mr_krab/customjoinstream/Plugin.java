@@ -52,6 +52,8 @@ public class Plugin extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
 	    setupChat();
+		Locale loc = new Locale(this);
+		loc.init();
 		mclog.info("Плагин [CustomJoinStream] активирован");
 		mclog.info("Автор Mr_Krab");
 		mclog.info("Спасибо за использование и тестирование моих плагинов");
