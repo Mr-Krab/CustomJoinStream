@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 public class CmdExecutor implements CommandExecutor {
 
 	Plugin plugin;
+	Locale loc;
 	public CmdExecutor(Plugin p) {
 		plugin = p;
 	}
@@ -17,7 +18,7 @@ public class CmdExecutor implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("reload")) {
 					if(sender.hasPermission("customjoinstream.reload")){
 						plugin.reloadConfig();
-						sender.sendMessage("Конфиг перезагружен");
+						sender.sendMessage(loc.getString("Reload"));
 						return true;
 					}
 					/* В ТУДУ лист

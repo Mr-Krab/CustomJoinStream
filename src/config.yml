@@ -11,7 +11,9 @@
 ##################################################################################
 
 #Настраиваемые сообщения при входе/выходе, необходимо выдать пермишн customjoinstream.stream
-lang: ru
+locale: en_US
+
+
 Messages:
     JoinMessage: '&3Игрок&r %prefix &c%nickname &3заходит на сервер'
     QuitMessage: '&3Игрок&r %prefix &c%nickname &3выходит с сервера'

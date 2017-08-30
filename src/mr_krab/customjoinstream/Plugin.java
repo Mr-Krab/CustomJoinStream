@@ -1,6 +1,5 @@
 package mr_krab.customjoinstream;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.logging.Logger;
 
@@ -22,10 +21,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.milkbowl.vault.chat.Chat;
 
 public class Plugin extends JavaPlugin implements Listener {
-	public static Plugin plugin;
+	public static Plugin instance;
 	FileConfiguration config = getConfig();
 	PluginManager pm = getServer().getPluginManager();
-	private Translator translator;
 	private static final Logger mclog = Logger.getLogger("minecraft");
 	public static Chat c = null;
 	private boolean setupChat() {
@@ -35,17 +33,6 @@ public class Plugin extends JavaPlugin implements Listener {
 	    }
 	    return c != null;
 	}
-	public File getLangFolder(){
-        File lang = new File(getDataFolder(),"lang");
-        lang.mkdirs();
-        return lang;
-	}
-	public String translate(String key) {
-        return translator.translate(key);
-}
-	public String translate(String key, Object... values) {
-        return translator.translate(key, values);
-}
 	// Включение плагина
 	public void onEnable() {
 		saveDefaultConfig();
@@ -65,8 +52,6 @@ public class Plugin extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
 	    setupChat();
-		String lang = this.getConfig().getString("lang");
-		this.translator = new Translator(this,lang);
 		mclog.info("Плагин [CustomJoinStream] активирован");
 		mclog.info("Автор Mr_Krab");
 		mclog.info("Спасибо за использование и тестирование моих плагинов");
@@ -76,7 +61,7 @@ public class Plugin extends JavaPlugin implements Listener {
 		mclog.info("Плагин [CustomJoinStream] отключается");
 	}
 	// Скрытие стандартного сообщения о входе игрока
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.HIGHEST)
     public boolean JoinUpdate(PlayerJoinEvent je) {
         je.setJoinMessage(null); {
         // Проверка на наличие пермишена и вывод своего сообщения
@@ -92,7 +77,7 @@ public class Plugin extends JavaPlugin implements Listener {
         }
 	}
 	// Скрытие стандартного сообщения о выходе игрока
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.HIGHEST)
     public boolean QuitUpdate(PlayerQuitEvent qe) {
         qe.setQuitMessage(null); {
         // Проверка на наличие пермишена и вывод своего сообщения
@@ -108,12 +93,12 @@ public class Plugin extends JavaPlugin implements Listener {
         }
 	}
 	// Скрытие стандартного сообщения о смерти игрока
-		@EventHandler(priority = EventPriority.MONITOR)
+		@EventHandler(priority = EventPriority.HIGHEST)
 	    public void DeathNull(PlayerDeathEvent de) {
 	        de.setDeathMessage(null);
 		}
 	// Скрытие стандартного сообщения о кике игрока
-		@EventHandler(priority = EventPriority.MONITOR)
+		@EventHandler(priority = EventPriority.HIGHEST)
 		public void KickNull(PlayerKickEvent ke) {
 		    ke.setLeaveMessage(null);
 			}
