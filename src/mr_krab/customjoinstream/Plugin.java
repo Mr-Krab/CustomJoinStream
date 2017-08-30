@@ -1,10 +1,11 @@
 package mr_krab.customjoinstream;
 
 import java.lang.reflect.Field;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,10 +22,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.milkbowl.vault.chat.Chat;
 
 public class Plugin extends JavaPlugin implements Listener {
+	Locale loc = new Locale(this); {
+	loc.init();
+	}
 	public static Plugin instance;
 	FileConfiguration config = getConfig();
 	PluginManager pm = getServer().getPluginManager();
-	private static final Logger mclog = Logger.getLogger("minecraft");
+	ConsoleCommandSender console = getServer().getConsoleSender();
 	public static Chat c = null;
 	private boolean setupChat() {
 	    RegisteredServiceProvider<Chat> cp = getServer().getServicesManager().getRegistration(Chat.class);
@@ -35,6 +39,7 @@ public class Plugin extends JavaPlugin implements Listener {
 	}
 	// Включение плагина
 	public void onEnable() {
+	    console.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_AQUA + "CustomJoinStream" + ChatColor.DARK_GRAY + "] " + ChatColor.GREEN + "Plugin is loading");
 		saveDefaultConfig();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		/* Активируем рефлексию Java для регистрации команд
@@ -52,15 +57,18 @@ public class Plugin extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
 	    setupChat();
-		Locale loc = new Locale(this);
-		loc.init();
-		mclog.info("Плагин [CustomJoinStream] активирован");
-		mclog.info("Автор Mr_Krab");
-		mclog.info("Спасибо за использование и тестирование моих плагинов");
+	    console.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_AQUA + "CustomJoinStream" + ChatColor.DARK_GRAY + "] " + ChatColor.GREEN + "Plugin is now enabled");
+	    console.sendMessage(ChatColor.GOLD + "Author " + ChatColor.RED + "Mr_Krab");
+	    console.sendMessage(ChatColor.YELLOW + "Thank you for using and testing my plugins.");
 	}
 	// Выключение плагина
 	public void onDisable() {
-		mclog.info("Плагин [CustomJoinStream] отключается");
+		console.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_AQUA + "CustomJoinStream" + ChatColor.DARK_GRAY + "] " + ChatColor.DARK_RED + "Plugin is now disabled");
+	}
+	public void onReload() {
+		Locale loc = new Locale(this); {
+		loc.init();
+		}
 	}
 	// Скрытие стандартного сообщения о входе игрока
 	@EventHandler(priority = EventPriority.HIGHEST)

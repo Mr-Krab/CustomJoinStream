@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 public class CmdExecutor implements CommandExecutor {
 
 	Plugin plugin;
-	Locale loc;
 	public CmdExecutor(Plugin p) {
 		plugin = p;
 	}
@@ -18,23 +17,23 @@ public class CmdExecutor implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("reload")) {
 					if(sender.hasPermission("customjoinstream.reload")){
 						plugin.reloadConfig();
-						sender.sendMessage(loc.getString("Reload"));
+						plugin.loc.init();
+						sender.sendMessage(plugin.loc.getString("Prefix") + plugin.loc.getString("Reload"));
 						return true;
 					}
 					/* В ТУДУ лист
 					 * Добавить команды
-					 * Изменить сообщения на выводимые из конфига
+					 * Улучшить работу пермов, сделать наследование
 					 */
                   }  
-			sender.sendMessage("Недостаточно прав customjoinstream.reload");
+				sender.sendMessage(plugin.loc.getString("NoPermissions"));
 		}
 				if(sender.hasPermission("customjoinstream.admin")){
-				sender.sendMessage("-----=====[Справка По плагину CustomJoinStream]=====-----");
-				sender.sendMessage("customjoinstream - Основная команда. Далее cjs");
-				sender.sendMessage("cjs reload - Перезагрузка плагина");
-				sender.sendMessage("-----=====+++++++++***+++***+++***+++++++++++=====-----");
+					sender.sendMessage(plugin.loc.getString("Prefix"));
+					sender.sendMessage(plugin.loc.getString("HelpLine1"));
+					sender.sendMessage(plugin.loc.getString("HelpLine2"));
 				} else {
-					sender.sendMessage("Недостаточно прав customjoinstream.admin");
+					sender.sendMessage(plugin.loc.getString("NoPermissions"));
 			}
 	return false;
 	}
