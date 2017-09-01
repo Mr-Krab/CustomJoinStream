@@ -26,9 +26,9 @@ public class Plugin extends JavaPlugin implements Listener {
 	loc.init();
 	}
 	public static Plugin instance;
-	FileConfiguration config = getConfig();
+	public FileConfiguration config = getConfig();
 	PluginManager pm = getServer().getPluginManager();
-	ConsoleCommandSender console = getServer().getConsoleSender();
+	public ConsoleCommandSender console = getServer().getConsoleSender();
 	public static Chat c = null;
 	private boolean setupChat() {
 	    RegisteredServiceProvider<Chat> cp = getServer().getServicesManager().getRegistration(Chat.class);
@@ -67,10 +67,5 @@ public class Plugin extends JavaPlugin implements Listener {
 	// Выключение плагина
 	public void onDisable() {
 		console.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_AQUA + "CustomJoinStream" + ChatColor.DARK_GRAY + "] " + ChatColor.DARK_RED + "Plugin is now disabled");
-	}
-	public void onReload() {
-		Locale loc = new Locale(this); {
-		loc.init();
-		}
 	}
 }
