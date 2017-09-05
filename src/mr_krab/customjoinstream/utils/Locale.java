@@ -43,7 +43,7 @@ public class Locale {
      */
     public void init() {
         this.locale.clear();
-        String loc = this.plugin.getConfig().getString("locale", "ru_RU");
+        String loc = this.plugin.getConfig().getString("locale", "en_US");
         this.localeFile = new File(this.plugin.getDataFolder(), loc + ".properties");
         
         if (this.saveLocale(loc)) {

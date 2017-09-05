@@ -17,6 +17,12 @@ Messages:
     JoinMessage: '&3Игрок&r %prefix &c%nickname&r %suffix &3зашел на сервер'
     QuitMessage: '&3Игрок&r %prefix &c%nickname&r %suffix &3вышел с сервера'
 #Воспроизведение звука по группам
+Radius: 50
 Groups:
     default: 
-        sound: BLOCK_GLASS_BREAK
+        Sounds:
+            Sound1: BLOCK_GLASS_BREAK
+            Sound2: BLOCK_NOTE_BELL
+        Effects:
+            Effect1: EXPLOSION_LARGE
+            Effect2: LARGE_SMOKE

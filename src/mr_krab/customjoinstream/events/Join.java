@@ -1,6 +1,8 @@
 package mr_krab.customjoinstream.events;
 
+import org.bukkit.Effect;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -40,7 +42,31 @@ public class Join implements Listener {
         Player p = jes.getPlayer();
         String group = Plugin.c.getPrimaryGroup(p);
 		if(p.hasPermission("customjoinstream.sound"))
-			p.playSound(p.getLocation(), Sound.valueOf(instance.config.getString("Groups." + group + ".sound").toUpperCase()), 10, 100);
+	        for (Entity near : p.getNearbyEntities(instance.config.getDouble("Radius"), instance.config.getDouble("Radius"), instance.config.getDouble("Radius"))) {
+	            if (!(near instanceof Player)) continue;
+	            ((Player) near).playSound(p.getLocation(), Sound.valueOf(instance.config.getString("Groups." + group + ".Sounds.Sound1").toUpperCase()), 10, 100);
+	        }
+        for (Entity near : p.getNearbyEntities(instance.config.getDouble("Radius"), instance.config.getDouble("Radius"), instance.config.getDouble("Radius"))) {
+            if (!(near instanceof Player)) continue;
+            ((Player) near).playSound(p.getLocation(), Sound.valueOf(instance.config.getString("Groups." + group + ".Sounds.Sound2").toUpperCase()), 10, 100);
+        }
+		return true;
+	}
+	
+	// Воспроизведение эффекта при входе
+	@EventHandler(priority = EventPriority.HIGHEST)
+    public boolean JoinEffect(PlayerJoinEvent jee) {
+        Player p = jee.getPlayer();
+        String group = Plugin.c.getPrimaryGroup(p);
+		if(p.hasPermission("customjoinstream.effect"))
+	        for (Entity near : p.getNearbyEntities(instance.config.getDouble("Radius"), instance.config.getDouble("Radius"), instance.config.getDouble("Radius"))) {
+	            if (!(near instanceof Player)) continue;
+	            ((Player) near).playEffect(p.getLocation(), Effect.valueOf(instance.config.getString("Groups." + group + ".Effects.Effect1")), null);
+	        }
+        for (Entity near : p.getNearbyEntities(instance.config.getDouble("Radius"), instance.config.getDouble("Radius"), instance.config.getDouble("Radius"))) {
+            if (!(near instanceof Player)) continue;
+            ((Player) near).playEffect(p.getLocation(), Effect.valueOf(instance.config.getString("Groups." + group + ".Effects.Effect2")), null);
+        }
 		return true;
 	}
 }
