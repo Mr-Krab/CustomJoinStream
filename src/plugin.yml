@@ -1,5 +1,0 @@
-name: CustomJoinStream
-main: mr_krab.customjoinstream.Plugin
-version: 1.0.7
-author: Mr_Krab
-description: 'HideStream Replacing. And Custom player join/quit messages.'

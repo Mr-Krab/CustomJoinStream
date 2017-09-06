@@ -1,0 +1,28 @@
+##############################
+#                            #
+#      CustomJoinStream      #
+#           Author           #
+#           Mr_Krab          #
+# https://vk.com/id109471660 #
+#                            #
+#    HideStream Replacing    #
+#                            #
+##############################
+
+#Язык используемый плагином, после изменения необходимо ввеси команду /cjs reload
+locale: ru_RU
+#Кастомные сообщения о входе/выходе игроков, необходимо выдать пермишн customjoinstream.stream
+#Для параметров %prefix и %suffix требуется плагин Vault и любой плагин пермишенов, например Pex
+Messages:
+    JoinMessage: '&3Игрок&r %prefix &chat%nickname&r %suffix &3зашел на сервер'
+    QuitMessage: '&3Игрок&r %prefix &chat%nickname&r %suffix &3вышел с сервера'
+#Воспроизведение звука по группам
+Radius: 50
+Groups:
+    default: 
+        Sounds:
+            Sound1: BLOCK_GLASS_BREAK
+            Sound2: BLOCK_NOTE_BELL
+        Effects:
+            Effect1: EXPLOSION_LARGE
+            Effect2: LARGE_SMOKE
