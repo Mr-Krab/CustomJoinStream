@@ -1,4 +1,4 @@
-package mr_krab.customjoinstream.events;
+package mr_krab.customjoinstream.listeners;
 
 import mr_krab.customjoinstream.utils.Utils;
 import org.bukkit.entity.Player;

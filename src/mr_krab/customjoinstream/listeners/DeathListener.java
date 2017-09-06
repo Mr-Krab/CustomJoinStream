@@ -1,4 +1,4 @@
-package mr_krab.customjoinstream.events;
+package mr_krab.customjoinstream.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

@@ -5,9 +5,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import mr_krab.customjoinstream.events.DeathListener;
-import mr_krab.customjoinstream.events.JoinListener;
-import mr_krab.customjoinstream.events.QuitListener;
+import mr_krab.customjoinstream.listeners.DeathListener;
+import mr_krab.customjoinstream.listeners.JoinListener;
+import mr_krab.customjoinstream.listeners.QuitListener;
 import mr_krab.customjoinstream.utils.Locale;
 import net.milkbowl.vault.chat.Chat;
 
