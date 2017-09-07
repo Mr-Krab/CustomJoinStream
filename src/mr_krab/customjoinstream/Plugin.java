@@ -1,71 +1,82 @@
 package mr_krab.customjoinstream;
 
-import java.lang.reflect.Field;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginManager;
+import mr_krab.customjoinstream.commands.CustomJoinStreamCommand;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import mr_krab.customjoinstream.events.Death;
-import mr_krab.customjoinstream.events.Join;
-import mr_krab.customjoinstream.events.Kick;
-import mr_krab.customjoinstream.events.Quit;
-import mr_krab.customjoinstream.utils.CmdExecutor;
-import mr_krab.customjoinstream.utils.CommandRegister;
+import mr_krab.customjoinstream.listeners.DeathListener;
+import mr_krab.customjoinstream.listeners.JoinListener;
+import mr_krab.customjoinstream.listeners.QuitListener;
 import mr_krab.customjoinstream.utils.Locale;
 import net.milkbowl.vault.chat.Chat;
 
-public class Plugin extends JavaPlugin implements Listener {
-	public Locale loc = new Locale(this); {
-	loc.init();
-	}
-	public static Plugin instance;
-	public FileConfiguration config = getConfig();
-	PluginManager pm = getServer().getPluginManager();
-	public ConsoleCommandSender console = getServer().getConsoleSender();
-	public static Chat c = null;
-	private boolean setupChat() {
-	    RegisteredServiceProvider<Chat> cp = getServer().getServicesManager().getRegistration(Chat.class);
-	    if (cp != null) {
-	      c = (Chat)cp.getProvider();
-	    }
-	    return c != null;
-	}
-	// Включение плагина
+public class Plugin
+	extends JavaPlugin {
+
+	private static Plugin instance;
+
+	private Locale loc = new Locale(this);
+	private CommandSender console = getServer().getConsoleSender();
+	private Chat chat = null;
+
+	//Включение плагина
+	@Override
 	public void onEnable() {
-	    console.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_AQUA + "CustomJoinStream" + ChatColor.DARK_GRAY + "] " + ChatColor.GREEN + "Plugin is loading");
+		if(getServer().getPluginManager().getPlugin("Vault") == null) { //Чат не будет без него работать
+			console.sendMessage("§8[§3CustomJoinStream§8] §cVault not found, disabling...");
+			getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
+
+		instance = this;
+
+		console.sendMessage("§8[§3CustomJoinStream§8] §aPlugin is now loading");
 		saveDefaultConfig();
-		getServer().getPluginManager().registerEvents(new Join(this), this);
-		getServer().getPluginManager().registerEvents(new Quit(this), this);
-		getServer().getPluginManager().registerEvents(new Kick(), this);
-		getServer().getPluginManager().registerEvents(new Death(), this);
-		/* Активируем рефлексию Java для регистрации команд
-		 * Регистрация производится через класс CommandRegister(не изменять его)
-		 * Сами команды прописывать как обычно в CmdExecutor
-		 */
-		try {
-            CmdExecutor cmd = new CmdExecutor(this);
-            CommandRegister reg = new CommandRegister(new String[]{"customjoinstream", "cjs"}, "Используйте", "customjoinstream или cjs", cmd, new Object(), this);
-            Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-            field.setAccessible(true);
-            CommandMap map = (CommandMap)field.get(Bukkit.getServer());
-            map.register(this.getDescription().getName(), reg);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-	    setupChat();
-	    console.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_AQUA + "CustomJoinStream" + ChatColor.DARK_GRAY + "] " + ChatColor.GREEN + "Plugin is now enabled");
-	    console.sendMessage(ChatColor.GOLD + "Author " + ChatColor.RED + "Mr_Krab");
-	    console.sendMessage(ChatColor.YELLOW + "Thank you for using and testing my plugins.");
+		loc.init();
+
+		setupChat();
+
+		//Регистрируем слушатели
+		getServer().getPluginManager().registerEvents(new JoinListener(), this);
+		getServer().getPluginManager().registerEvents(new QuitListener(), this);
+		getServer().getPluginManager().registerEvents(new DeathListener(), this);
+
+		//Регистрация команды
+		getCommand("customjoinstream").setExecutor(new CustomJoinStreamCommand());
+
+		console.sendMessage("§8[§3CustomJoinStream§8] §aPlugin is now enabled");
+		console.sendMessage("§6Author §cMr_Krab");
+		console.sendMessage("§eThank you for using and testing my plugins.");
 	}
-	// Выключение плагина
+
+	//Выключение плагина
+	@Override
 	public void onDisable() {
-		console.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.DARK_AQUA + "CustomJoinStream" + ChatColor.DARK_GRAY + "] " + ChatColor.DARK_RED + "Plugin is now disabled");
+		instance = null;
+
+		console.sendMessage("§8[§3CustomJoinStream§8] §cPlugin is now disabled");
+
+		loc = null;
+		console = null;
+		chat = null;
+	}
+
+	public Locale getLocale() {
+		return loc;
+	}
+
+	public Chat getChat() {
+		return chat;
+	}
+
+	private void setupChat() {
+		RegisteredServiceProvider<Chat> cp = getServer().getServicesManager().getRegistration(Chat.class);
+		if(cp == null) return;
+		chat = cp.getProvider();
+	}
+
+	public static Plugin getInstance() {
+		return instance;
 	}
 }
