@@ -6,9 +6,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class Death implements Listener  {
+	
+	
 	// Скрытие стандартного сообщения о смерти игрока
 		@EventHandler(priority = EventPriority.HIGHEST)
-		public void DeathNull(PlayerDeathEvent de) {
+		public boolean DeathNull(PlayerDeathEvent de) {
 			de.setDeathMessage(null);
+			return false;
 			}
 }
