@@ -16,10 +16,10 @@ public class Utils {
     }
 
     public static void playJoinEffect(Player player) {
-        String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
         if(!player.hasPermission("customjoinstream.effect")) {
             return;
         }
+        String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
         getNearbyPlayers(player).forEach(near -> {
             near.playEffect(player.getLocation(),
                     Effect.valueOf(Plugin.getInstance().getConfig().getString("Groups." + group + ".Effects.Effect1")),
@@ -31,10 +31,10 @@ public class Utils {
     }
 
     public static void playJoinSound(Player player) {
-        String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
         if(!player.hasPermission("customjoinstream.sound")) {
             return;
         }
+        String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
         getNearbyPlayers(player).forEach(near -> {
             near.playSound(player.getLocation(),
                     Sound.valueOf(Plugin.getInstance().getConfig().getString("Groups." + group + ".Sounds.Sound1").toUpperCase()),
@@ -46,7 +46,7 @@ public class Utils {
     }
 
     private static List<Player> getNearbyPlayers(Player player) {
-        return player.getNearbyEntities(Plugin.getInstance().getConfig().getDouble("Radius"), 
+        return player.getNearbyEntities(Plugin.getInstance().getConfig().getDouble("Radius"),
                 Plugin.getInstance().getConfig().getDouble("Radius"),
                 Plugin.getInstance().getConfig().getDouble("Radius")).stream()
                 .filter(entity -> entity instanceof Player)
