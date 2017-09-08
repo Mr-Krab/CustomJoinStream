@@ -36,6 +36,7 @@ public class LocManager {
 		Plugin.getInstance().fileConfig.set("Spawn.Pitch", loc.getPitch());
 		Plugin.getInstance().fileConfig.save(Plugin.getInstance().getDataFolder() + File.separator +"locations.yml");
 	}
+	
 	// Телепорт на стартовую позицию.
 	public Location TpJoinLoc(String string) {
 		Location loc = new Location(Bukkit.getServer().getWorld(Plugin.getInstance().fileConfig.getString("JoinLoc.World")),
@@ -48,7 +49,6 @@ public class LocManager {
 	}
 	// Телепорт на спавн.
 	public Location TpSpawn(String string) {
-		if (Plugin.getInstance().fileConfig.getConfigurationSection("Spawn") == null) return null;
 		Location loc = new Location(Bukkit.getServer().getWorld(Plugin.getInstance().fileConfig.getString("Spawn.World")),
 				Plugin.getInstance().fileConfig.getDouble("Spawn.X"),
 				Plugin.getInstance().fileConfig.getDouble("Spawn.Y"),

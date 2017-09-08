@@ -20,6 +20,8 @@ Messages:
 TpToStartLoc:
     Join: false
     Quit: false
+#Скрытие всех игроков. Полезно для авторизации.
+HideAllPlayers: false
 #Воспроизведение звука по группам при входе игроков
 #Пермишены "customjoinstream.sound" и "customjoinstream.effect"
 Radius: 50

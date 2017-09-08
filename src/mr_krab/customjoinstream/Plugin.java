@@ -32,7 +32,7 @@ public class Plugin extends JavaPlugin {
 
 	public LocManager locm = new LocManager();
 
-	private CommandSender console = getServer().getConsoleSender();
+	public CommandSender console = getServer().getConsoleSender();
 	
 	private Chat chat = null;
 
@@ -54,7 +54,7 @@ public class Plugin extends JavaPlugin {
 		console.sendMessage("§8[§3CustomJoinStream§8] §aPlugin is now loading");
 		saveDefaultConfig();
 		loc.init();
-
+		
 		setupChat();
 
 		//Регистрируем слушатели

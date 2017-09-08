@@ -33,7 +33,7 @@ public class CmdExecutor implements  CommandExecutor {
 					if(sender.hasPermission("customjoinstream.reload")){
 						instance.reloadConfig();
 						instance.loc.init();
-						sender.sendMessage(instance.loc.getString("Prefix") + instance.loc.getString("Reload"));
+						sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("Reload"));
 						return true;
 					} else {
 						sender.sendMessage(instance.loc.getString("NoPermissions"));
@@ -43,7 +43,7 @@ public class CmdExecutor implements  CommandExecutor {
 					}else if (args[0].equalsIgnoreCase("setjoinloc")) {
 							if(sender.hasPermission("customjoinstream.setloc")){
 							if (checksender(sender)) {
-								sender.sendMessage(instance.loc.getString("Prefix") + instance.loc.getString("OnlyPlayer"));
+								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
 							}
 							Player p = (Player) sender;
 										try {
@@ -51,7 +51,7 @@ public class CmdExecutor implements  CommandExecutor {
 										} catch (IOException e) {
 											e.printStackTrace();
 										}
-							sender.sendMessage(instance.loc.getString("Prefix") + instance.loc.getString("Setloc").replace("%loc", "JoinLoc"));
+							sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("Setloc").replace("%loc", "JoinLoc"));
 							return true;
 							} else {
 								sender.sendMessage(instance.loc.getString("NoPermissions"));
@@ -61,7 +61,7 @@ public class CmdExecutor implements  CommandExecutor {
 					}else if (args[0].equalsIgnoreCase("setspawn")) {
 							if(sender.hasPermission("customjoinstream.setloc")){
 							if (checksender(sender)) {
-								sender.sendMessage(instance.loc.getString("Prefix") + instance.loc.getString("OnlyPlayer"));
+								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
 							}
 							Player p = (Player) sender;
 									try {
@@ -69,7 +69,7 @@ public class CmdExecutor implements  CommandExecutor {
 									} catch (IOException e) {
 										e.printStackTrace();
 									}
-							sender.sendMessage(instance.loc.getString("Prefix") + instance.loc.getString("Setloc").replace("%loc", "Spawn"));
+							sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("Setloc").replace("%loc", "Spawn"));
 							return true;
 							} else {
 								sender.sendMessage(instance.loc.getString("NoPermissions"));
@@ -80,13 +80,13 @@ public class CmdExecutor implements  CommandExecutor {
 					}else if (args[0].equalsIgnoreCase("tpjoin")) {
 							if(sender.hasPermission("customjoinstream.tpjoin")){
 							if (checksender(sender)) {
-								sender.sendMessage(instance.loc.getString("Prefix") + instance.loc.getString("OnlyPlayer"));
+								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
 							}
 							if(Plugin.getInstance().fileConfig.getString("JoinLoc") !=null) {
 							Player p = (Player) sender;
 							Location join = Plugin.getInstance().locm.TpJoinLoc(p.getName());
 							p.teleport(join);
-							sender.sendMessage(instance.loc.getString("Prefix") + instance.loc.getString("TpJoinLoc"));
+							sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("TpJoinLoc"));
 							return true;
 							}
 							sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("PosNotFound"));
@@ -98,7 +98,7 @@ public class CmdExecutor implements  CommandExecutor {
 					}else if (args[0].equalsIgnoreCase("spawn")) {
 							if(sender.hasPermission("customjoinstream.spawn")){
 							if (checksender(sender)) {
-								sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("OnlyPlayer"));
+								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
 							}
 							if(Plugin.getInstance().fileConfig.getString("Spawn") !=null) {
 							Player p = (Player) sender;
@@ -111,15 +111,46 @@ public class CmdExecutor implements  CommandExecutor {
 							} else {
 								sender.sendMessage(instance.loc.getString("NoPermissions"));
 							}
+							
+/*===========================================================================================================================================*/
+							
+							// Аргумент на скрытие игрока
+					}else if (args[0].equalsIgnoreCase("hide")) {
+							if(sender.hasPermission("customjoinstream.hide")){
+							if (checksender(sender)) {
+								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
+							}
+							Player player = (Player) sender;
+						    		EventUtils.playerHide(player);
+							sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("HideOn"));
+							return true;
+							} else {
+								sender.sendMessage(instance.loc.getString("NoPermissions"));
+							}
+				
+							// Аргумент на отображение игрока
+				}else if (args[0].equalsIgnoreCase("show")) {
+					if(sender.hasPermission("customjoinstream.hide")){
+					if (checksender(sender)) {
+						sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
+					}
+					Player player = (Player) sender;
+					EventUtils.playerShow(player);
+					sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("HideOff"));
+					return true;
+					} else {
+						sender.sendMessage(instance.loc.getString("NoPermissions"));
+					}
+				
+				
 					/* В ТУДУ лист
 					 * Улучшить работу пермов, сделать наследование
 					 * Возможно добавить еще что-то
 					 */
-							}
-							
+				}
 				}
 				if(sender.hasPermission("customjoinstream.admin")){
-					sender.sendMessage(instance.loc.getString("Prefix"));
+					sender.sendMessage(instance.loc.getString("PluginPrefix"));
 					sender.sendMessage(instance.loc.getString("HelpLine1"));
 					sender.sendMessage(instance.loc.getString("HelpLine2"));
 					sender.sendMessage(instance.loc.getString("HelpLine3"));
@@ -127,8 +158,10 @@ public class CmdExecutor implements  CommandExecutor {
 					sender.sendMessage(instance.loc.getString("HelpLine5"));
 					sender.sendMessage(instance.loc.getString("HelpLine6"));
 					sender.sendMessage(instance.loc.getString("HelpLine7"));
+					sender.sendMessage(instance.loc.getString("HelpLine8"));
 				} else {
 					sender.sendMessage(instance.loc.getString("NoPermissions"));
+					return false;
 			}
 	return false;
 	}

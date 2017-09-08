@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import mr_krab.customjoinstream.Plugin;
+import mr_krab.customjoinstream.utils.EventUtils;
 
 public class Join implements Listener {
 	
@@ -16,6 +17,8 @@ public class Join implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 		public void onJoin(PlayerJoinEvent event) {
 			Player player = event.getPlayer();
+			EventUtils.playerHide(player);
+			EventUtils.hideAllPlayers(player);
 			EventUtils.playJoinSound(player);
 			EventUtils.playJoinEffect(player);
 			EventUtils.playerJoinTp(player);
