@@ -42,16 +42,19 @@ public class Plugin extends JavaPlugin {
 	//Включение плагина
 	@Override
 	public void onEnable() {
+		console.sendMessage("§8[§3CustomJoinStream§8] §eLoading plugin...");
+		console.sendMessage("§8[§3CustomJoinStream§8] §eChecking for the presence of a plugin Vault...");
 		// Проверка на наличие Vault
 		if(getServer().getPluginManager().getPlugin("Vault") == null) { 
 			console.sendMessage("§8[§3CustomJoinStream§8] §cVault not found, disabling...");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
+		console.sendMessage("§8[§3CustomJoinStream§8] §aVault is found, continue the load plugin");
+		console.sendMessage("§8[§3CustomJoinStream§8] §eLoading and enabling components...");
 
 		instance = this;
 
-		console.sendMessage("§8[§3CustomJoinStream§8] §aPlugin is now loading");
 		saveDefaultConfig();
 		loc.init();
 		
@@ -75,7 +78,6 @@ public class Plugin extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 		console.sendMessage("§8[§3CustomJoinStream§8] §aPlugin is now enabled");
 		console.sendMessage("§6Author §cMr_Krab");
 		console.sendMessage("§eThank you for using and testing my plugins.");

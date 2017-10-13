@@ -21,7 +21,8 @@ public class Join implements Listener {
 			EventUtils.hideAllPlayers(player);
 			EventUtils.playJoinSound(player);
 			EventUtils.playJoinEffect(player);
-			EventUtils.playerJoinTp(player);
+			EventUtils.playerTpJoinLoc(player);
+			EventUtils.flyPlayerJoin(player);
 			String prefix = Plugin.getInstance().getChat().getPlayerPrefix(player);
 			String suffix = Plugin.getInstance().getChat().getPlayerSuffix(player);
 			if(!player.hasPermission("customjoinstream.stream")) {

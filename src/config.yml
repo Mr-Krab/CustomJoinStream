@@ -15,21 +15,24 @@ locale: ru_RU
 Messages:
     JoinMessage: '&3Игрок&r %prefix &c%nickname&r %suffix &3зашел на сервер'
     QuitMessage: '&3Игрок&r %prefix &c%nickname&r %suffix &3вышел с сервера'
-#Данную опцию переставлять в значение true только если усталовлена стартовая локация "JoinLoc"
-#При каком именно событии телепортировать игрока на стартовую позицию можете выбрать самостоятельно или при желании используйте в обоих случаях
-TpToStartLoc:
-    Join: false
-    Quit: false
 #Скрытие всех игроков. Полезно для авторизации.
 HideAllPlayers: false
-#Воспроизведение звука по группам при входе игроков
+#Воспроизведение звука и эффекта по группам при входе игроков
 #Пермишены "customjoinstream.sound" и "customjoinstream.effect"
-Radius: 50
 Groups:
-    default: 
+    default:
         Sounds:
+            SuoundRadius: 50
             Sound1: BLOCK_GLASS_BREAK
             Sound2: BLOCK_NOTE_BELL
         Effects:
+            EffectRadius: 50
             Effect1: EXPLOSION_LARGE
             Effect2: LARGE_SMOKE
+        #Полет при входе
+        FlyJoin: false
+        #Данную опцию переставлять в значение true только если усталовлена стартовая локация "JoinLoc"
+        #При каком именно событии телепортировать игрока на стартовую позицию можете выбрать самостоятельно или при желании используйте в обоих случаях
+        TpToStartLoc:
+            Join: false
+            Quit: false

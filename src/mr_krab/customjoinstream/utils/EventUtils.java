@@ -5,9 +5,11 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import mr_krab.customjoinstream.Plugin;
 
@@ -23,14 +25,16 @@ public class EventUtils {
 	            return;
 	        }
 	        String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
+	        if(Plugin.getInstance().getConfig().get("Groups." + group) !=null) {
             player.playSound(player.getLocation(), Sound.valueOf(Plugin.getInstance().getConfig().getString("Groups." + group + ".Sounds.Sound1").toUpperCase()), 10, 100);
             player.playSound(player.getLocation(), Sound.valueOf(Plugin.getInstance().getConfig().getString("Groups." + group + ".Sounds.Sound2").toUpperCase()), 10, 100);
-	        getNearbyPlayers(player).forEach(near -> {
+            getSoundNearbyPlayers(player).forEach(near -> {
 	            near.playSound(player.getLocation(),
 	                    Sound.valueOf(Plugin.getInstance().getConfig().getString("Groups." + group + ".Sounds.Sound1").toUpperCase()), 10, 100);
 	            near.playSound(player.getLocation(),
 	                    Sound.valueOf(Plugin.getInstance().getConfig().getString("Groups." + group + ".Sounds.Sound2").toUpperCase()), 10, 100);
 	        });
+	        }
 	    }
 
 
@@ -40,60 +44,58 @@ public class EventUtils {
             return;
         }
         String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
+        if(Plugin.getInstance().getConfig().get("Groups." + group) !=null) {
         player.playEffect(player.getLocation(), Effect.valueOf(Plugin.getInstance().getConfig().getString("Groups." + group + ".Effects.Effect1")), null);
         player.playEffect(player.getLocation(), Effect.valueOf(Plugin.getInstance().getConfig().getString("Groups." + group + ".Effects.Effect2")), null);
-        getNearbyPlayers(player).forEach(near -> {
+        getEffectNearbyPlayers(player).forEach(near -> {
             near.playEffect(player.getLocation(),
                     Effect.valueOf(Plugin.getInstance().getConfig().getString("Groups." + group + ".Effects.Effect1")), null);
             near.playEffect(player.getLocation(),
                     Effect.valueOf(Plugin.getInstance().getConfig().getString("Groups." + group + ".Effects.Effect2")), null);
-        });
-		}
-		// Радиус действия эффекта из конфига
-    private static List<Player> getNearbyPlayers(Player player) {
-        return player.getNearbyEntities(Plugin.getInstance().getConfig().getDouble("Radius"),
-                Plugin.getInstance().getConfig().getDouble("Radius"),
-                Plugin.getInstance().getConfig().getDouble("Radius")).stream()
+        	});
+        }
+	}
+		// Радиус действия звука из конфига
+    private static List<Player> getSoundNearbyPlayers(Player player) {
+        String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
+        return player.getNearbyEntities(Plugin.getInstance().getConfig().getDouble("Groups." + group + ".SuoundRadius"),
+                Plugin.getInstance().getConfig().getDouble("Groups." + group + ".SuoundRadius"),
+                Plugin.getInstance().getConfig().getDouble("Groups." + group + ".SuoundRadius")).stream()
                 .filter(entity -> entity instanceof Player)
                 .map(entity -> (Player)entity).collect(Collectors.toList());
     }
-		// Телепортация игрока при входе
-	public static void playerJoinTp (Player player) {
-		if(Plugin.getInstance().getConfig().getBoolean("TpToStartLoc.Join")) {
-				Location join = Plugin.getInstance().locm.TpJoinLoc(player.getName());
-				player.teleport(join);
-		}
-	}
-	
-		// Телепортация игрока при выходе
-	public static void playerQuitTp (Player player) {
-		if(Plugin.getInstance().getConfig().getBoolean("TpToStartLoc.Quit")) {
+		// Радиус действия эффекта из конфига
+    private static List<Player> getEffectNearbyPlayers(Player player) {
+        String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
+        return player.getNearbyEntities(Plugin.getInstance().getConfig().getDouble("Groups." + group + ".EffectRadius"),
+                Plugin.getInstance().getConfig().getDouble("Groups." + group + ".EffectRadius"),
+                Plugin.getInstance().getConfig().getDouble("Groups." + group + ".EffectRadius")).stream()
+                .filter(entity -> entity instanceof Player)
+                .map(entity -> (Player)entity).collect(Collectors.toList());
+    }
+		// Телепортация игрока на стартовую позицию
+	public static void playerTpJoinLoc (Player player) {
+        String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
+		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + "TpToStartLoc.Join")) {
 				Location join = Plugin.getInstance().locm.TpJoinLoc(player.getName());
 				player.teleport(join);
 		}
 	}
 	
 	// Скрытие игрока
+	@SuppressWarnings("static-access")
 	public static void playerHide (Player player) {
 		if(player.hasPermission("customjoinstream.hide")) {
 		Bukkit.getOnlinePlayers().forEach(p -> {
             if(!(p.equals(player))){
             	p.hidePlayer(player);
+            	player.setPlayerListName(null);
+	            player.setMetadata("hidden", new FixedMetadataValue(instance.getInstance(), true));
             	}
         });
 		}
 	}
 	
-	// Отображение игрока
-	public static void playerShow (Player player) {
-		if(player.hasPermission("customjoinstream.hide")) {
-		Bukkit.getOnlinePlayers().forEach(p -> {
-            if(!(p.equals(player))){
-            	p.showPlayer(player);
-            	}
-        });
-		}
-	}
 	
 	// Скрытие всех игроков
 	public static void hideAllPlayers (Player player) {
@@ -107,4 +109,19 @@ public class EventUtils {
 		}
 	}
 	
+	//Полет при входе
+	public static void flyPlayerJoin (Player player) {
+        String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
+        if (player.getGameMode() == GameMode.ADVENTURE);
+        if (player.getGameMode() == GameMode.SURVIVAL) {
+		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + "FlyJoin")) {
+				player.setAllowFlight(true);
+				player.setFlying(true);
+			} else {
+				player.setAllowFlight(false);
+				player.setFlying(false);
+			}
+	}
+	}
+	//Полет
 }

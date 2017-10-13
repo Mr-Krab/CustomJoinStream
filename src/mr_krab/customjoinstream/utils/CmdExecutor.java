@@ -2,11 +2,13 @@ package mr_krab.customjoinstream.utils;
 
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import mr_krab.customjoinstream.Plugin;
 
@@ -18,13 +20,8 @@ public class CmdExecutor implements  CommandExecutor {
 		instance = plugin;
 	}
 
-	public boolean checksender (CommandSender sender) {
-		if (sender instanceof Player) {
-			return false;
-		}
-		return true;
-	}
 
+	@SuppressWarnings("static-access")
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 				if (cmd.getName().equalsIgnoreCase("customjoinstream") && args.length ==1) {
 					
@@ -38,12 +35,31 @@ public class CmdExecutor implements  CommandExecutor {
 					} else {
 						sender.sendMessage(instance.loc.getString("NoPermissions"));
 							}
+
+					// Аргумент на справку.
+				if (args[0].equalsIgnoreCase("help")) {
+					if(sender.hasPermission("customjoinstream.admin")){
+						sender.sendMessage(instance.loc.getString("PluginPrefix"));
+						sender.sendMessage(instance.loc.getString("HelpLine1"));
+						sender.sendMessage(instance.loc.getString("HelpLine2"));
+						sender.sendMessage(instance.loc.getString("HelpLine3"));
+						sender.sendMessage(instance.loc.getString("HelpLine4"));
+						sender.sendMessage(instance.loc.getString("HelpLine5"));
+						sender.sendMessage(instance.loc.getString("HelpLine6"));
+						sender.sendMessage(instance.loc.getString("HelpLine7"));
+						sender.sendMessage(instance.loc.getString("HelpLine8"));
+						return true;
+					} else {
+						sender.sendMessage(instance.loc.getString("NoPermissions"));
+						}
+					}
 					
 						// Аргумент на установку точки телепортации при входе/выходе
 					}else if (args[0].equalsIgnoreCase("setjoinloc")) {
 							if(sender.hasPermission("customjoinstream.setloc")){
-							if (checksender(sender)) {
+							if (!(sender instanceof Player)) {
 								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
+								return false;
 							}
 							Player p = (Player) sender;
 										try {
@@ -60,9 +76,10 @@ public class CmdExecutor implements  CommandExecutor {
 						// Аргумент на установку точки спавна
 					}else if (args[0].equalsIgnoreCase("setspawn")) {
 							if(sender.hasPermission("customjoinstream.setloc")){
-							if (checksender(sender)) {
+								if (!(sender instanceof Player)) {
 								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
-							}
+								return false;
+								}
 							Player p = (Player) sender;
 									try {
 										Plugin.getInstance().locm.SetSpawnLoc(p.getLocation());
@@ -79,8 +96,13 @@ public class CmdExecutor implements  CommandExecutor {
 						// Аргумент на телепортацию на стартовую позицию
 					}else if (args[0].equalsIgnoreCase("tpjoin")) {
 							if(sender.hasPermission("customjoinstream.tpjoin")){
-							if (checksender(sender)) {
+								if (!(sender instanceof Player)) {
 								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
+								return false;
+								}
+							if(Plugin.getInstance().fileConfig == null) {
+								sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("PosNotFound"));
+								return false;
 							}
 							if(Plugin.getInstance().fileConfig.getString("JoinLoc") !=null) {
 							Player p = (Player) sender;
@@ -97,9 +119,14 @@ public class CmdExecutor implements  CommandExecutor {
 						// Аргумент на телепортацию на спавн
 					}else if (args[0].equalsIgnoreCase("spawn")) {
 							if(sender.hasPermission("customjoinstream.spawn")){
-							if (checksender(sender)) {
+								if (!(sender instanceof Player)) {
 								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
-							}
+								return false;
+								}
+								if(Plugin.getInstance().fileConfig == null) {
+									sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("PosNotFound"));
+									return false;
+								}
 							if(Plugin.getInstance().fileConfig.getString("Spawn") !=null) {
 							Player p = (Player) sender;
 							Location join = Plugin.getInstance().locm.TpSpawn(p.getName());
@@ -117,51 +144,66 @@ public class CmdExecutor implements  CommandExecutor {
 							// Аргумент на скрытие игрока
 					}else if (args[0].equalsIgnoreCase("hide")) {
 							if(sender.hasPermission("customjoinstream.hide")){
-							if (checksender(sender)) {
+								if (!(sender instanceof Player)) {
 								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
-							}
+								return false;
+								}
 							Player player = (Player) sender;
-						    		EventUtils.playerHide(player);
-							sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("HideOn"));
-							return true;
+					        if(!player.hasMetadata("hidden")) {
+					            for(Player ps : Bukkit.getOnlinePlayers()) {
+					                ps.hidePlayer(player);
+					            	player.setPlayerListName(null);
+					            }
+					            player.setMetadata("hidden", new FixedMetadataValue(instance.getInstance(), true));
+								sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("HideOn"));
+					            return true;
+					        } else {
+					            for(Player ps : Bukkit.getOnlinePlayers()) {
+					                ps.showPlayer(player);
+					            	player.setPlayerListName(player.getName());
+					            }
+					            player.removeMetadata("hidden", instance.getInstance());
+								sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("HideOff"));
+					            return true;
+					        }
 							} else {
 								sender.sendMessage(instance.loc.getString("NoPermissions"));
 							}
-				
-							// Аргумент на отображение игрока
-				}else if (args[0].equalsIgnoreCase("show")) {
-					if(sender.hasPermission("customjoinstream.hide")){
-					if (checksender(sender)) {
-						sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
+							// Аргумент на полет игрока
+					}else if (args[0].equalsIgnoreCase("fly")) {
+						if(sender.hasPermission("customjoinstream.fly")){
+							if (!(sender instanceof Player)) {
+							sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
+							return false;
+							}
+						Player player = (Player) sender;
+						if(!player.isFlying()) {
+						player.setAllowFlight(true);
+						player.setFlying(true);
+						player.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("FlyOn"));
+					} else {
+						player.setAllowFlight(false);
+						player.setFlying(false);
+						player.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("FlyOff"));
 					}
-					Player player = (Player) sender;
-					EventUtils.playerShow(player);
-					sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("HideOff"));
 					return true;
 					} else {
 						sender.sendMessage(instance.loc.getString("NoPermissions"));
 					}
 				
-				
 					/* В ТУДУ лист
-					 * Улучшить работу пермов, сделать наследование
-					 * Возможно добавить еще что-то
+					 * Добавить еще аргументов при необходимости
 					 */
 				}
 				}
 				if(sender.hasPermission("customjoinstream.admin")){
 					sender.sendMessage(instance.loc.getString("PluginPrefix"));
-					sender.sendMessage(instance.loc.getString("HelpLine1"));
-					sender.sendMessage(instance.loc.getString("HelpLine2"));
-					sender.sendMessage(instance.loc.getString("HelpLine3"));
-					sender.sendMessage(instance.loc.getString("HelpLine4"));
-					sender.sendMessage(instance.loc.getString("HelpLine5"));
-					sender.sendMessage(instance.loc.getString("HelpLine6"));
-					sender.sendMessage(instance.loc.getString("HelpLine7"));
-					sender.sendMessage(instance.loc.getString("HelpLine8"));
+					sender.sendMessage(instance.loc.getString("HelpLine0"));
 				} else {
+					if(!(args.length >= 1)){
 					sender.sendMessage(instance.loc.getString("NoPermissions"));
 					return false;
+					}
 			}
 	return false;
 	}

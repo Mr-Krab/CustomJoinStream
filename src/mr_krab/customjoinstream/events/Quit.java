@@ -16,7 +16,7 @@ public class Quit implements Listener {
 		@EventHandler(priority = EventPriority.HIGHEST)
 	    public boolean QuitUpdate(PlayerQuitEvent event) {
 			Player player = event.getPlayer();
-			EventUtils.playerQuitTp(player);
+			EventUtils.playerTpJoinLoc(player);
 			String prefix = Plugin.getInstance().getChat().getPlayerPrefix(player);
 			String suffix = Plugin.getInstance().getChat().getPlayerSuffix(player);
 			if(!player.hasPermission("customjoinstream.stream")) {
