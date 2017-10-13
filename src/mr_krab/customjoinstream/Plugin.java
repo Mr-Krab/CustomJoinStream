@@ -79,8 +79,8 @@ public class Plugin extends JavaPlugin {
             e.printStackTrace();
         }
 		console.sendMessage("§8[§3CustomJoinStream§8] §aPlugin is now enabled");
-		console.sendMessage("§6Author §cMr_Krab");
-		console.sendMessage("§eThank you for using and testing my plugins.");
+		console.sendMessage("§6Author: §cMr_Krab");
+		console.sendMessage("§9Thank you for using and testing my plugins.");
 	}
 
 	//Выключение плагина

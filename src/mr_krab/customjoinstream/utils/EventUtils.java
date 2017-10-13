@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -112,16 +111,12 @@ public class EventUtils {
 	//Полет при входе
 	public static void flyPlayerJoin (Player player) {
         String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
-        if (player.getGameMode() == GameMode.ADVENTURE);
-        if (player.getGameMode() == GameMode.SURVIVAL) {
-		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + "FlyJoin")) {
+		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + ".FlyJoin")) {
 				player.setAllowFlight(true);
 				player.setFlying(true);
 			} else {
 				player.setAllowFlight(false);
 				player.setFlying(false);
-			}
+        }
 	}
-	}
-	//Полет
 }
