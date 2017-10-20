@@ -109,14 +109,23 @@ public class EventUtils {
 	}
 	
 	//Полет при входе
+	@SuppressWarnings("static-access")
 	public static void flyPlayerJoin (Player player) {
         String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
 		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + ".FlyJoin")) {
-				player.setAllowFlight(true);
-				player.setFlying(true);
+	        if(!player.hasMetadata("flying")) {
+			player.setAllowFlight(true);
+			player.setFlying(true);
+            player.setMetadata("flying", new FixedMetadataValue(instance.getInstance(), true));
 			} else {
 				player.setAllowFlight(false);
 				player.setFlying(false);
-        }
+	            player.removeMetadata("flying", instance.getInstance());
+			}
+		} else {
+			player.setAllowFlight(false);
+			player.setFlying(false);
+            player.removeMetadata("flying", instance.getInstance());
+		}
 	}
 }

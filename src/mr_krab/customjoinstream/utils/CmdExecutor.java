@@ -169,6 +169,7 @@ public class CmdExecutor implements  CommandExecutor {
 							} else {
 								sender.sendMessage(instance.loc.getString("NoPermissions"));
 							}
+							
 							// Аргумент на полет игрока
 					}else if (args[0].equalsIgnoreCase("fly")) {
 						if(sender.hasPermission("customjoinstream.fly")){
@@ -177,13 +178,15 @@ public class CmdExecutor implements  CommandExecutor {
 							return false;
 							}
 						Player player = (Player) sender;
-						if(!player.isFlying()) {
+				        if(!player.hasMetadata("flying")) {
 						player.setAllowFlight(true);
 						player.setFlying(true);
+			            player.setMetadata("flying", new FixedMetadataValue(instance.getInstance(), true));
 						player.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("FlyOn"));
 					} else {
 						player.setAllowFlight(false);
 						player.setFlying(false);
+			            player.removeMetadata("flying", instance.getInstance());
 						player.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("FlyOff"));
 					}
 					return true;
