@@ -75,9 +75,13 @@ public class EventUtils {
 		// Телепортация игрока на стартовую позицию
 	public static void playerTpJoinLoc (Player player) {
         String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
-		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + "TpToStartLoc.Join")) {
+		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + ".TpToStartLoc.Join")) {
 				Location join = Plugin.getInstance().locm.TpJoinLoc(player.getName());
 				player.teleport(join);
+		} 
+		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + ".TpToStartLoc.Quit")) {
+			Location join = Plugin.getInstance().locm.TpJoinLoc(player.getName());
+			player.teleport(join);
 		}
 	}
 	

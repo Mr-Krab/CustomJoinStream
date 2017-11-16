@@ -23,7 +23,7 @@ public class CmdExecutor implements  CommandExecutor {
 
 	@SuppressWarnings("static-access")
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-				if (cmd.getName().equalsIgnoreCase("customjoinstream") && args.length ==1) {
+				if (cmd.getName().equalsIgnoreCase("customjoinstream") && args.length >=1) {
 					
 						// Аргумент на перезагрузку плагина.
 				if (args[0].equalsIgnoreCase("reload")) {
@@ -35,27 +35,24 @@ public class CmdExecutor implements  CommandExecutor {
 					} else {
 						sender.sendMessage(instance.loc.getString("NoPermissions"));
 							}
-
-					// Аргумент на справку.
-				if (args[0].equalsIgnoreCase("help")) {
-					if(sender.hasPermission("customjoinstream.admin")){
-						sender.sendMessage(instance.loc.getString("PluginPrefix"));
-						sender.sendMessage(instance.loc.getString("HelpLine1"));
-						sender.sendMessage(instance.loc.getString("HelpLine2"));
-						sender.sendMessage(instance.loc.getString("HelpLine3"));
-						sender.sendMessage(instance.loc.getString("HelpLine4"));
-						sender.sendMessage(instance.loc.getString("HelpLine5"));
-						sender.sendMessage(instance.loc.getString("HelpLine6"));
-						sender.sendMessage(instance.loc.getString("HelpLine7"));
-						sender.sendMessage(instance.loc.getString("HelpLine8"));
-						return true;
-					} else {
-						sender.sendMessage(instance.loc.getString("NoPermissions"));
-						}
-					}
+					// Аргумент на справку
+				} else if (args[0].equalsIgnoreCase("help")) {
+						if(sender.hasPermission("customjoinstream.admin")) {
+							sender.sendMessage(instance.loc.getString("ServerPrefix"));
+							sender.sendMessage(instance.loc.getString("HelpLine1"));
+							sender.sendMessage(instance.loc.getString("HelpLine2"));
+							sender.sendMessage(instance.loc.getString("HelpLine3"));
+							sender.sendMessage(instance.loc.getString("HelpLine4"));
+							sender.sendMessage(instance.loc.getString("HelpLine5"));
+							sender.sendMessage(instance.loc.getString("HelpLine6"));
+							sender.sendMessage(instance.loc.getString("HelpLine7"));
+							sender.sendMessage(instance.loc.getString("HelpLine8"));
+						} else {
+							sender.sendMessage(instance.loc.getString("NoPermissions"));
+								}
 					
 						// Аргумент на установку точки телепортации при входе/выходе
-					}else if (args[0].equalsIgnoreCase("setjoinloc")) {
+					} else if (args[0].equalsIgnoreCase("setjoinloc")) {
 							if(sender.hasPermission("customjoinstream.setloc")){
 							if (!(sender instanceof Player)) {
 								sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("OnlyPlayer"));
@@ -199,14 +196,13 @@ public class CmdExecutor implements  CommandExecutor {
 					 */
 				}
 				}
-				if(sender.hasPermission("customjoinstream.admin")){
-					sender.sendMessage(instance.loc.getString("PluginPrefix"));
+				if (args.length == 0) {
+				if(sender.hasPermission("customjoinstream.admin")) {
+					sender.sendMessage(instance.loc.getString("ServerPrefix"));
 					sender.sendMessage(instance.loc.getString("HelpLine0"));
 				} else {
-					if(!(args.length >= 1)){
 					sender.sendMessage(instance.loc.getString("NoPermissions"));
-					return false;
-					}
+					} 
 			}
 	return false;
 	}
