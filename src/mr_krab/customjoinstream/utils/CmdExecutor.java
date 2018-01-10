@@ -29,6 +29,7 @@ public class CmdExecutor implements  CommandExecutor {
 				if (args[0].equalsIgnoreCase("reload")) {
 					if(sender.hasPermission("customjoinstream.reload")){
 						instance.reloadConfig();
+						instance.checkConfigVersion();
 						instance.loc.init();
 						sender.sendMessage(instance.loc.getString("PluginPrefix") + instance.loc.getString("Reload"));
 						return true;
@@ -124,7 +125,7 @@ public class CmdExecutor implements  CommandExecutor {
 									sender.sendMessage(instance.loc.getString("ServerPrefix") + instance.loc.getString("PosNotFound"));
 									return false;
 								}
-							if(Plugin.getInstance().fileConfig.getString("Spawn") !=null) {
+							if(Plugin.getInstance().fileConfig.getString("Spawn") != null) {
 							Player p = (Player) sender;
 							Location join = Plugin.getInstance().locm.TpSpawn(p.getName());
 							p.teleport(join);

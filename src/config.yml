@@ -9,14 +9,32 @@
 #                            #
 ##############################
 
+#Мой репозиторий на GitHub с разными плюшками https://github.com/Mr-Krab
+
+#Не изменять этот параметр! Необходим для оповещений об изменениях в конфиге по умолчанию.
+ConfigVersion: 1
+
 #Язык используемый плагином, после изменения необходимо ввеси команду /cjs reload
 locale: ru_RU
-#Кастомные сообщения о входе/выходе игроков, необходимо выдать пермишн customjoinstream.stream
-Messages:
-    JoinMessage: '&3Игрок&r %prefix &c%nickname&r %suffix &3зашел на сервер'
-    QuitMessage: '&3Игрок&r %prefix &c%nickname&r %suffix &3вышел с сервера'
-#Скрытие всех игроков. Полезно для авторизации.
-HideAllPlayers: false
+
+#Основные настройки.
+General:
+    #Кастомные сообщения о входе/выходе игроков, необходимо выдать пермишн customjoinstream.stream
+    Messages:
+        JoinMessage: '&3Игрок&r %prefix &c%nickname&r %suffix &3зашел на сервер'
+        QuitMessage: '&3Игрок&r %prefix &c%nickname&r %suffix &3вышел с сервера'
+    #Полет при входе
+    FlyJoin: false
+    #Данную опцию переставлять в значение true только если усталовлена стартовая локация "JoinLoc"
+    #При каком именно событии телепортировать игрока на стартовую позицию можете выбрать самостоятельно или при желании используйте в обоих случаях
+    TpToStartLoc:
+        Join: false
+        Quit: false
+    #Телепорт при респавне игрока.
+    RespawnTP: false
+    #Скрытие всех игроков. Полезно для авторизации.
+    HideAllPlayers: false
+
 #Воспроизведение звука и эффекта по группам при входе игроков
 #Пермишены "customjoinstream.sound" и "customjoinstream.effect"
 Groups:
@@ -36,3 +54,5 @@ Groups:
         TpToStartLoc:
             Join: false
             Quit: false
+        #Телепорт при респавне игрока.
+        RespawnTP: false

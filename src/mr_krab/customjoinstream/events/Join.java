@@ -18,6 +18,7 @@ public class Join implements Listener {
 		public void onJoin(PlayerJoinEvent event) {
 			Player player = event.getPlayer();
 			EventUtils.playerHide(player);
+			EventUtils.playerHideOther(player);
 			EventUtils.hideAllPlayers(player);
 			EventUtils.playJoinSound(player);
 			EventUtils.playJoinEffect(player);
@@ -29,6 +30,6 @@ public class Join implements Listener {
 				event.setJoinMessage(null);
 				return;
 			}
-			event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', Plugin.getInstance().getConfig().getString("Messages.JoinMessage").replace("%prefix", prefix).replace("%nickname", event.getPlayer().getName()).replace("%suffix", suffix)));
+			event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', Plugin.getInstance().getConfig().getString("General.Messages.JoinMessage").replace("%prefix", prefix).replace("%nickname", event.getPlayer().getName()).replace("%suffix", suffix)));
 		}
 }

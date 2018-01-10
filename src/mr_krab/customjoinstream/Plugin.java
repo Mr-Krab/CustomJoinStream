@@ -1,6 +1,7 @@
 package mr_krab.customjoinstream;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import org.bukkit.Bukkit;
@@ -16,6 +17,7 @@ import mr_krab.customjoinstream.events.Death;
 import mr_krab.customjoinstream.events.Join;
 import mr_krab.customjoinstream.events.Kick;
 import mr_krab.customjoinstream.events.Quit;
+import mr_krab.customjoinstream.events.Respawn;
 import mr_krab.customjoinstream.utils.CmdExecutor;
 import mr_krab.customjoinstream.utils.CommandRegister;
 import mr_krab.customjoinstream.utils.LocManager;
@@ -42,21 +44,22 @@ public class Plugin extends JavaPlugin {
 	//Включение плагина
 	@Override
 	public void onEnable() {
-		console.sendMessage("§8[§3CustomJoinStream§8] §eLoading plugin...");
-		console.sendMessage("§8[§3CustomJoinStream§8] §eChecking for the presence of a plugin Vault...");
+		saveDefaultConfig();
+		loc.init();
+		console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("Loading"));
 		// Проверка на наличие Vault
+		console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("CheckVault"));
 		if(getServer().getPluginManager().getPlugin("Vault") == null) { 
-			console.sendMessage("§8[§3CustomJoinStream§8] §cVault not found, disabling...");
+			console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("VaultNotFound"));
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
-		console.sendMessage("§8[§3CustomJoinStream§8] §aVault is found, continue the load plugin");
-		console.sendMessage("§8[§3CustomJoinStream§8] §eLoading and enabling components...");
+		console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("VaultIsFound"));
+		console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("Loading2"));
 
 		instance = this;
 
 		saveDefaultConfig();
-		loc.init();
 		
 		setupChat();
 
@@ -65,6 +68,7 @@ public class Plugin extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Quit(), this);
 		getServer().getPluginManager().registerEvents(new Death(), this);
 		getServer().getPluginManager().registerEvents(new Kick(), this);
+		getServer().getPluginManager().registerEvents(new Respawn(), this);
 
 		//Регистрация команды
 
@@ -78,9 +82,11 @@ public class Plugin extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
         }
-		console.sendMessage("§8[§3CustomJoinStream§8] §aPlugin is now enabled");
-		console.sendMessage("§6Author: §cMr_Krab");
-		console.sendMessage("§9Thank you for using and testing my plugins.");
+		console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("EnableSuccess1")  + this.getDescription().getVersion());
+		console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("Author") + "§cMr_Krab");
+		console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("EnableSuccess2"));
+		// Проверка версии конфига
+		checkConfigVersion();
 	}
 
 	//Выключение плагина
@@ -88,13 +94,39 @@ public class Plugin extends JavaPlugin {
 	public void onDisable() {
 		instance = null;
 
-		console.sendMessage("§8[§3CustomJoinStream§8] §cPlugin is now disabled");
+		console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("Disable"));
 
 		loc = null;
 		console = null;
 		chat = null;
 	}
-
+	
+	public void checkConfigVersion(){
+		if (!getConfig().isSet("ConfigVersion")) {
+			console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("ConfigWarn1"));
+			console.sendMessage(loc.getString("ConfigWarn2"));
+			try {
+				getConfig().save(getDataFolder() + File.separator + "OldConfig.yml");
+				saveResource("config.yml", true);
+				reloadConfig();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if ((getConfig().getInt("ConfigVersion")) != 1) {
+			console.sendMessage("§7[§3CustomJoinStream§7] " + loc.getString("ConfigWarn1"));
+			console.sendMessage(loc.getString("ConfigWarn2"));
+			try {
+				getConfig().save(getDataFolder() + File.separator + "OldConfig.yml");
+				saveResource("config.yml", true);
+				reloadConfig();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			saveDefaultConfig();
+		}
+	}
+	
 	public Locale getLocale() {
 		return loc;
 	}

@@ -23,7 +23,7 @@ public class Quit implements Listener {
 				event.setQuitMessage(null);
 				return false;
 			}
-			event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', Plugin.getInstance().getConfig().getString("Messages.QuitMessage").replace("%prefix", prefix).replace("%nickname", event.getPlayer().getName()).replace("%suffix", suffix)));
+			event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', Plugin.getInstance().getConfig().getString("General.Messages.QuitMessage").replace("%prefix", prefix).replace("%nickname", event.getPlayer().getName()).replace("%suffix", suffix)));
 			return true;
 		}
 }

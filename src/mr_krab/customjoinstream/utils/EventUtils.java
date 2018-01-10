@@ -75,11 +75,11 @@ public class EventUtils {
 		// Телепортация игрока на стартовую позицию
 	public static void playerTpJoinLoc (Player player) {
         String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
-		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + ".TpToStartLoc.Join")) {
+		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + ".TpToStartLoc.Join") || Plugin.getInstance().getConfig().getBoolean("General.TpToStartLoc.Join")) {
 				Location join = Plugin.getInstance().locm.TpJoinLoc(player.getName());
 				player.teleport(join);
-		} 
-		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + ".TpToStartLoc.Quit")) {
+		} else
+		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + ".TpToStartLoc.Quit") || Plugin.getInstance().getConfig().getBoolean("General.TpToStartLoc.Quit")) {
 			Location join = Plugin.getInstance().locm.TpJoinLoc(player.getName());
 			player.teleport(join);
 		}
@@ -88,7 +88,7 @@ public class EventUtils {
 	// Скрытие игрока
 	@SuppressWarnings("static-access")
 	public static void playerHide (Player player) {
-		if(player.hasPermission("customjoinstream.hide")) {
+		if(player.hasPermission("customjoinstream.hidejoin")) {
 		Bukkit.getOnlinePlayers().forEach(p -> {
             if(!(p.equals(player))){
             	p.hidePlayer(player);
@@ -99,10 +99,23 @@ public class EventUtils {
 		}
 	}
 	
+	// Скрытие игрока
+	public static void playerHideOther (Player player) {
+		Bukkit.getOnlinePlayers().forEach(p -> {
+            if(!(p.equals(player))){
+            	if (p.hasPermission("customjoinstream.hidejoin")) {
+            	p.getMetadata("hidden");
+            	player.hidePlayer(p);
+            	p.setPlayerListName(null);
+            	}
+            }
+        });
+	}
+	
 	
 	// Скрытие всех игроков
 	public static void hideAllPlayers (Player player) {
-		if(Plugin.getInstance().getConfig().getBoolean("HideAllPlayers")) {
+		if(Plugin.getInstance().getConfig().getBoolean("General.HideAllPlayers")) {
 		Bukkit.getOnlinePlayers().forEach(p -> {
             if(!(p.equals(player))){
             	p.hidePlayer(player);
@@ -116,7 +129,7 @@ public class EventUtils {
 	@SuppressWarnings("static-access")
 	public static void flyPlayerJoin (Player player) {
         String group = Plugin.getInstance().getChat().getPrimaryGroup(player);
-		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + ".FlyJoin")) {
+		if(Plugin.getInstance().getConfig().getBoolean("Groups." + group + ".FlyJoin") || Plugin.getInstance().getConfig().getBoolean("General.FlyJoin")) {
 	        if(!player.hasMetadata("flying")) {
 			player.setAllowFlight(true);
 			player.setFlying(true);
